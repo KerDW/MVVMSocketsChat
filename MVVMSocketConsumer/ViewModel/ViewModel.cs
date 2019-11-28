@@ -16,7 +16,6 @@ namespace MVVMSocketConsumer.ViewModel
 
         public ViewModel()
         {
-
             Start().Wait();
 
         }
