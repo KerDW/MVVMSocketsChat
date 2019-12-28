@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -16,9 +17,15 @@ namespace MVVMSocketConsumer.ViewModel
 
         public ViewModel()
         {
-            Start().Wait();
-
+            join = new RelayCommand<string>(JoinChat);
         }
+
+        public void JoinChat(string btName)
+        {
+            Start().Wait();
+        }
+
+        public RelayCommand<string> join { get; set; }
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
@@ -28,12 +35,21 @@ namespace MVVMSocketConsumer.ViewModel
             }
         }
 
+        private String _name;
+        public String name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public async Task Start()
         {
-            Console.Write("Nom: ");
-            string nom = Console.ReadLine();
+            string nom = name;
 
-            Console.Write("Connectant....");
             var cts = new CancellationTokenSource();
             var socket = new ClientWebSocket();
             string wsUri = string.Format("wss://localhost:44332/api/websocket?nom={0}", nom);
