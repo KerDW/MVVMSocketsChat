@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MVVMSocketConsumer"
         xmlns:ViewModel="clr-namespace:MVVMSocketConsumer.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="461">
     <Window.DataContext>
         <ViewModel:ViewModel/>
     </Window.DataContext>
@@ -15,7 +15,7 @@
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="listView" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="339" Margin="181,10,0,0" VerticalAlignment="Top" Width="232">
+        <ListView x:Name="listView" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="366" Margin="181,10,0,0" VerticalAlignment="Top" Width="232">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>

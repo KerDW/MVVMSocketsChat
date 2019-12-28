@@ -14,6 +14,8 @@ namespace MVVMSocketConsumer.ViewModel
     class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        CancellationTokenSource cts = new CancellationTokenSource();
+        ClientWebSocket socket = new ClientWebSocket();
 
         public ViewModel()
         {
@@ -22,7 +24,7 @@ namespace MVVMSocketConsumer.ViewModel
 
         public void JoinChat(string btName)
         {
-            Start().Wait();
+            Start();
         }
 
         public RelayCommand<string> join { get; set; }
@@ -49,14 +51,10 @@ namespace MVVMSocketConsumer.ViewModel
         public async Task Start()
         {
             string nom = name;
-
-            var cts = new CancellationTokenSource();
-            var socket = new ClientWebSocket();
             string wsUri = string.Format("wss://localhost:44332/api/websocket?nom={0}", nom);
             await socket.ConnectAsync(new Uri(wsUri), cts.Token);
-            Console.WriteLine(socket.State);
 
-            Task.Factory.StartNew(
+            await Task.Factory.StartNew(
                 async () =>
                 {
                     var rcvBytes = new byte[128];
