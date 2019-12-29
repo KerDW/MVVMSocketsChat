@@ -116,11 +116,23 @@ namespace MVVMSocketConsumer.ViewModel
                         WebSocketReceiveResult rcvResult = await socket.ReceiveAsync(rcvBuffer, cts.Token);
                         byte[] msgBytes = rcvBuffer.Skip(rcvBuffer.Offset).Take(rcvResult.Count).ToArray();
                         string rcvMsg = Encoding.UTF8.GetString(msgBytes);
+                        if(rcvMsg.StartsWith("*"))
+                        {
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                onlineUsers.Clear();
+                                foreach (var user in rcvMsg.Substring(1).Split(','))
+                                {
+                                    onlineUsers.Add(user);
+                                }
+                            }));
+                        } else {
+                            // run on ui thread
+                            Application.Current.Dispatcher.Invoke(new Action(() => {
+                                messages.Add(rcvMsg);
+                            }));
+                        }
                         Console.WriteLine("{0}", rcvMsg);
-                        Application.Current.Dispatcher.Invoke(new Action(() => {
-                            messages.Add(rcvMsg);
-                        }));
-                        Console.WriteLine(messages.Count);
                     }
                 }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }

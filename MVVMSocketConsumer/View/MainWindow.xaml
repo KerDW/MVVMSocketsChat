@@ -25,6 +25,6 @@
         <Button x:Name="send" Command="{Binding send}" CommandParameter="{Binding Name, RelativeSource={RelativeSource Self}}" Grid.ColumnSpan="2" Content="Send" HorizontalAlignment="Left" Margin="342,396,0,0" VerticalAlignment="Top" Width="71" Height="23"/>
         <ListBox Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="381" Margin="181,10,0,0" VerticalAlignment="Top" Width="232" ItemsSource="{Binding messages}">
         </ListBox>
-        <ListBox ItemsSource="{Binding onlineUsers}" IsHitTestVisible="False" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="304" Margin="10,111,0,0" VerticalAlignment="Top" Width="147"/>
+        <ListBox Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="308" Margin="10,111,0,0" VerticalAlignment="Top" Width="147" ItemsSource="{Binding onlineUsers}"/>
     </Grid>
 </Window>
