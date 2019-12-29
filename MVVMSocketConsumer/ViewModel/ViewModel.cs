@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.WebSockets;
@@ -8,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MVVMSocketConsumer.ViewModel
 {
@@ -61,11 +63,9 @@ namespace MVVMSocketConsumer.ViewModel
                 NotifyPropertyChanged();
             }
         }
+        private ObservableCollection<String> _messages = new ObservableCollection<String>();
 
-
-        private List<String> _messages = new List<String>();
-
-        public List<String> messages
+        public ObservableCollection<String> messages
         {
             get { return _messages; }
             set
@@ -104,8 +104,10 @@ namespace MVVMSocketConsumer.ViewModel
                         byte[] msgBytes = rcvBuffer.Skip(rcvBuffer.Offset).Take(rcvResult.Count).ToArray();
                         string rcvMsg = Encoding.UTF8.GetString(msgBytes);
                         Console.WriteLine("{0}", rcvMsg);
-                        messages.Add(rcvMsg);
-                        PropertyChanged(this, new PropertyChangedEventArgs("_messages"));
+                        Application.Current.Dispatcher.Invoke(new Action(() => {
+                            messages.Add(rcvMsg);
+                        }));
+                        Console.WriteLine(messages.Count);
                     }
                 }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
