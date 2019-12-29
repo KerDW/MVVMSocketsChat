@@ -63,6 +63,7 @@ namespace MVVMSocketConsumer.ViewModel
                 NotifyPropertyChanged();
             }
         }
+
         private ObservableCollection<String> _messages = new ObservableCollection<String>();
 
         public ObservableCollection<String> messages
@@ -71,6 +72,18 @@ namespace MVVMSocketConsumer.ViewModel
             set
             {
                 _messages = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<String> _onlineUsers = new ObservableCollection<String>();
+
+        public ObservableCollection<String> onlineUsers
+        {
+            get { return _onlineUsers; }
+            set
+            {
+                _onlineUsers = value;
                 NotifyPropertyChanged();
             }
         }

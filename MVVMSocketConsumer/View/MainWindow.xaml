@@ -7,7 +7,7 @@
         xmlns:ViewModel="clr-namespace:MVVMSocketConsumer.ViewModel"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="MainWindow" Height="456" Width="472">
+        Title="MainWindow" Height="465" Width="443">
     <Window.DataContext>
         <ViewModel:ViewModel/>
     </Window.DataContext>
@@ -23,9 +23,8 @@
         <TextBox Text="{Binding message}" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="23" Margin="181,396,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161">
         </TextBox>
         <Button x:Name="send" Command="{Binding send}" CommandParameter="{Binding Name, RelativeSource={RelativeSource Self}}" Grid.ColumnSpan="2" Content="Send" HorizontalAlignment="Left" Margin="342,396,0,0" VerticalAlignment="Top" Width="71" Height="23"/>
-        <ListBox IsHitTestVisible="False" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="381" Margin="181,10,0,0" VerticalAlignment="Top" Width="232" ItemsSource="{Binding messages}">
+        <ListBox Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="381" Margin="181,10,0,0" VerticalAlignment="Top" Width="232" ItemsSource="{Binding messages}">
         </ListBox>
-        <ListBox IsHitTestVisible="False" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="304" Margin="10,111,0,0" VerticalAlignment="Top" Width="147"/>
-
+        <ListBox ItemsSource="{Binding onlineUsers}" IsHitTestVisible="False" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="304" Margin="10,111,0,0" VerticalAlignment="Top" Width="147"/>
     </Grid>
 </Window>
