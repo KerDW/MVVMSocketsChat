@@ -17,9 +17,11 @@ namespace MVVMSocketConsumer.ViewModel
         CancellationTokenSource cts = new CancellationTokenSource();
         ClientWebSocket socket = new ClientWebSocket();
 
+
         public ViewModel()
         {
             join = new RelayCommand<string>(JoinChat);
+            send = new RelayCommand<string>(SendMessage);
         }
 
         public void JoinChat(string btName)
@@ -28,6 +30,7 @@ namespace MVVMSocketConsumer.ViewModel
         }
 
         public RelayCommand<string> join { get; set; }
+        public RelayCommand<string> send { get; set; }
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
@@ -48,6 +51,42 @@ namespace MVVMSocketConsumer.ViewModel
             }
         }
 
+        private String _message;
+        public String message
+        {
+            get { return _message; }
+            set
+            {
+                _message = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
+        private List<String> _messages = new List<String>();
+
+        public List<String> messages
+        {
+            get { return _messages; }
+            set
+            {
+                _messages = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public async void SendMessage(string btName)
+        {
+            if (message == "bye")
+            {
+                cts.Cancel();
+                return;
+            }
+            byte[] sendBytes = Encoding.UTF8.GetBytes(message);
+            var sendBuffer = new ArraySegment<byte>(sendBytes);
+            await socket.SendAsync(sendBuffer, WebSocketMessageType.Text, endOfMessage: true, cancellationToken: cts.Token);
+        }
+
         public async Task Start()
         {
             string nom = name;
@@ -65,21 +104,10 @@ namespace MVVMSocketConsumer.ViewModel
                         byte[] msgBytes = rcvBuffer.Skip(rcvBuffer.Offset).Take(rcvResult.Count).ToArray();
                         string rcvMsg = Encoding.UTF8.GetString(msgBytes);
                         Console.WriteLine("{0}", rcvMsg);
+                        messages.Add(rcvMsg);
+                        PropertyChanged(this, new PropertyChangedEventArgs("_messages"));
                     }
                 }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-
-            while (true)
-            {
-                var missatge = Console.ReadLine();
-                if (missatge == "Adeu")
-                {
-                    cts.Cancel();
-                    return;
-                }
-                byte[] sendBytes = Encoding.UTF8.GetBytes(missatge);
-                var sendBuffer = new ArraySegment<byte>(sendBytes);
-                await socket.SendAsync(sendBuffer, WebSocketMessageType.Text, endOfMessage: true, cancellationToken: cts.Token);
-            }
         }
     }
 }
